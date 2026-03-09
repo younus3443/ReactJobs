@@ -14,7 +14,37 @@ function EditJob() {
     const [contactEmail, setContactEmail] = useState(job.company.contactEmail);
     const [contactPhone, setContactPhone] = useState(job.company.contactPhone);
 
-    const submitForm = (e) => {}
+    const submitForm = async (e) => {
+    e.preventDefault();
+
+    const updatedJob = {
+      title,
+      type,
+      location,
+      description,
+      salary,
+      company: {
+        name: companyName,
+        description: companyDescription,
+        contactEmail,
+        contactPhone,
+      },
+    };
+
+    try {
+      await fetch(`/api/jobs/${job.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedJob),
+      });
+
+      navigate(`/jobs/${job.id}`);
+    } catch (error) {
+      console.log("Error updating job:", error);
+    }
+  };
 
   return (
     <section className="bg-indigo-50">
